@@ -14,6 +14,7 @@ class User{
     map[CITY]=city;
     map[GENDER]=gender;
     userList.add(map);
+
   }
 
   List<Map<String, dynamic>> getUserList() {
