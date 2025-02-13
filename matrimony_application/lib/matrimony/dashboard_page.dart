@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:matrimony_application/matrimony/about_us_page.dart';
 import 'package:matrimony_application/matrimony/user_crud.dart';
+import 'package:matrimony_application/matrimony/user_details_screen.dart';
 import 'package:matrimony_application/matrimony/user_form_page.dart';
 import 'package:matrimony_application/matrimony/utils_const_string.dart';
 
