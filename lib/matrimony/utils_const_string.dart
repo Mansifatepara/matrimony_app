@@ -5,3 +5,6 @@ final String MOBILENUMBER = 'MobileNumber';
 final String DOB = 'DateOfBirth';
 final String CITY = 'City';
 final String GENDER = 'Gender';
+final String HOBBIES = 'Hobbies';
+final String PASSWORD = 'Password';
+final String CONFIRMPASSWORD = 'ConfirmPassword';

@@ -1,11 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:matrimony_application/matrimony/about_us_page.dart';
 import 'package:matrimony_application/matrimony/user_crud.dart';
+import 'package:matrimony_application/matrimony/user_details_screen.dart';
 import 'package:matrimony_application/matrimony/user_form_page.dart';
 import 'package:matrimony_application/matrimony/utils_const_string.dart';
 
 class Dashboard extends StatefulWidget {
   Dashboard({super.key});
+
+  // List<Map<String,String>> filtereData = [];
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -36,6 +40,7 @@ class _DashboardState extends State<Dashboard> {
         centerTitle: true,
       ),
       drawer: Drawer(
+        backgroundColor: Colors.deepPurple.shade200,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListView(
@@ -97,7 +102,7 @@ class _DashboardState extends State<Dashboard> {
                       )).then((value) {
                     if (value != null) {
                       setState(() {
-                        _user.userList.add(value);
+                        _user.userList.insert(0, value);
                         print(_user.userList);
                       });
                     }
@@ -145,21 +150,27 @@ class _DashboardState extends State<Dashboard> {
                 )
         ],
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => userForm(),
-            )).then((value) {
-          if (value != null) {
-            setState(() {
-              _user.userList.add(value);
-              print(_user.userList);
-            });
-          }
-        });
-      },backgroundColor: Colors.deepPurple,
-      child: Icon(Icons.add,color: Colors.white,),),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => userForm(),
+              )).then((value) {
+            if (value != null) {
+              setState(() {
+                _user.userList.insert(0, value);
+                print(_user.userList);
+              });
+            }
+          });
+        },
+        backgroundColor: Colors.deepPurple,
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
           onTap: (index) {
             setState(() {
@@ -184,6 +195,11 @@ class _DashboardState extends State<Dashboard> {
             ),
             BottomNavigationBarItem(
               backgroundColor: Colors.deepPurple,
+              icon: Icon(Icons.list),
+              label: 'UserList',
+            ),
+            BottomNavigationBarItem(
+              backgroundColor: Colors.deepPurple,
               icon: Icon(Icons.details_sharp),
               label: 'About Us',
             ),
@@ -198,7 +214,11 @@ class _DashboardState extends State<Dashboard> {
         elevation: 10,
         child: InkWell(
           onTap: () {
-            // Navigator.of(context).push()
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => UserDetailPage(
+                user: _user.userList[index],
+              ),
+            ));
           },
           child: Row(
             children: [
@@ -237,9 +257,49 @@ class _DashboardState extends State<Dashboard> {
                     IconButton(
                         onPressed: () {},
                         icon: Icon(Icons.favorite_border_sharp)),
-                    IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
-                    // SizedBox(height: 10,),
-                    IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return userForm(
+                              userDetail: _user.userList[index],
+                            );
+                          },
+                        )).then((value) {
+                          _user.userList[index] = value;
+                          setState(() {});
+                        });
+                      },
+                      icon: Icon(Icons.edit),
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return CupertinoAlertDialog(
+                                title: Text("Delete"),
+                                content: Text("Are you want to delete user??"),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _user.userList.removeAt(index);
+                                          Navigator.pop(context);
+                                        });
+                                      },
+                                      child: Text("Yes")),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text("No"))
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        icon: Icon(Icons.delete)),
                   ],
                 ),
               ),
